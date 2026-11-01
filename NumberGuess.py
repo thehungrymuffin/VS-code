@@ -13,4 +13,6 @@ while Start == "Y":
             print("Higher")
             Player_Guess = int(input("Keep Guessing:  "))
     print("You did it! the Correct number was: " + str(Comp_Number))
-    Start = input("Would you like to keep playing? (Y/N) ").upper
+    Rounds_Played += 1
+    Start = input("Would you like to keep playing? (Y/N) ").upper()
+print("You played " + str(Rounds_Played))
