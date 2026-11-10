@@ -30,6 +30,18 @@ def Solve_DC(V = None, I = None, R = None, P = None):
     
     return V, I, R, P
 
+def resistance_calculator(Parallel = 0, Series = 0, Resistances = 0):
+    try:
+        Resistance_parallel = (1/Resistances) * Parallel
+        Resistance_series = (Resistances) * Series
+        Resistance_Total = Resistance_parallel + Resistance_Total
+    except ZeroDivisionError:
+        raise ZeroDivisionError("You Divided by 0 buddy")
+    
+    return Resistance_Total
+    
+
+
 def get_input(prompt):
     while True:
         user_val = input(prompt)
@@ -45,18 +57,18 @@ def get_input(prompt):
 
 
 
-    
+Options = {1: "DC_calculator", 2: "Resistance Calculator"}
 
 Decision = input("Which Function would you like to use? 1. DC_calculator ")
-if Decision == "1":
+
+
+if Options[Decision] == "1":
     V = get_input("Voltage (V): ")
     I = get_input("Current (I): ")
     R = get_input("Resistance (R): ")
     P = get_input("Power (P): ")
 
     result = Solve_DC(V, I, R, P)
-
-
     print(f"The DC values are Voltage: {result[0]:.3f} Volts, Current: {result[1]:.3f} , Resistance: {result[2]:.3f} Ohms and Power: {result[3]:.3f} Watts")
-    
+
 
