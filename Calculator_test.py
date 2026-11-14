@@ -1,5 +1,7 @@
 import pytest
 from Circuit_Calculator import Solve_DC
+from Circuit_Calculator import resistance_series
+from Circuit_Calculator import resistance_parallel
 
 
 def test_voltage_and_resistance():
@@ -25,5 +27,19 @@ def test_voltage_and_power():
     assert I == pytest.approx(3)
     assert R == pytest.approx(4)
 
-def test_series_and_parallel():
-    pass
+def test_series():
+    assert resistance_series([100, 200, 300]) == pytest.approx(600)
+
+def test_parallel():
+    assert resistance_parallel([100, 100]) == pytest.approx(50)
+
+def test_parallel_zero_resistor():
+    with pytest.raises(ZeroDivisionError):
+        resistance_parallel([100, 0])
+
+def test_series_empty():
+    assert resistance_series([]) == 0
+
+def test_parallel_empty():
+    with pytest.raises(ValueError):
+        resistance_parallel([])

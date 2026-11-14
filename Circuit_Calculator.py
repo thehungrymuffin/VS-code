@@ -40,17 +40,18 @@ def resistance_series(Ohms):
         for r in Ohms:
             Series += r
         return Series
+    return Series
     
 def resistance_parallel(Ohms):
-    try:
-        Parallel = 0
-        if len(Ohms) != 0:
-            for r in Ohms:
-                Parallel += (1/(r))
-            Parallel = Parallel ** -1
+    Parallel = 0
+    if len(Ohms) != 0:
+        for r in Ohms:
+            if r == 0:
+                raise ZeroDivisionError("You divided by 0")
+            Parallel += (1/(r))
+        Parallel = Parallel ** -1
         return Parallel
-    except ZeroDivisionError:
-        raise ZeroDivisionError("You Divided by 0 buddy")
+    raise ValueError("Hey you did not include any resistors")
     
     
 def get_input(prompt):
@@ -85,21 +86,26 @@ if __name__ == "__main__":
         Resistors_Series = []
         Resistors_Parallel = []
 
-        Series = int(input("How many resistors do you have in series? "))
-        Parallel = int(input("How many resistors do you have in parallel? "))
+        Series = get_input("How many resistors do you have in series? ")
+        Parallel = get_input("How many resistors do you have in parallel? ")
 
-        for i in range(0, Series):
+        for i in range(0, int(Series)):
             Ohms = float(input("What is the resistance for each one in Series? "))
             Resistors_Series.append(Ohms)
 
-        for i in range(0, Parallel):
+        for i in range(0, int(Parallel)):
             Ohms = float(input("What is the resistance for each one in Parallel? "))
             Resistors_Parallel.append(Ohms)
- 
 
-        if (len(Resistors_Series) and len(Resistors_Parallel) != 0):
-            Total_REQ = resistance_parallel(Resistors_Parallel) + resistance_series(Resistors_Series)
-            print(f"The Total Resistance in your circuit is {Total_REQ:.3f} Ohms")
-        else:
+        if (len(Resistors_Series) and len(Resistors_Parallel) == 0):
             print("Hey you did not put any resistors")
+        else:
+            try:
+                Total_REQ = resistance_series(Resistors_Series)
+                if resistance_parallel(Resistors_Parallel):
+                    Total_REQ += resistance_parallel(resistance_parallel)
+                print(f"The Total Resistance in your circuit is {Total_REQ:.3f} Ohms")
+            except ValueError as e:
+                print(e)
+
 
