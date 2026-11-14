@@ -34,18 +34,25 @@ def Solve_DC(V = None, I = None, R = None, P = None):
     
     return V, I, R, P
 
-def resistance_calculator(Parallel = 0, Series = 0, Ohms = 0):
+def resistance_series(Ohms):
+    Series = 0
+    if len(Ohms) != 0:
+        for r in Ohms:
+            Series += r
+        return Series
+    
+def resistance_parallel(Ohms):
     try:
-        Resistance_parallel = (1/Ohms) * Parallel
-        Resistance_series = (Ohms) * Series
-        Resistance_Total = Resistance_parallel + Resistance_Total
+        Parallel = 0
+        if len(Ohms) != 0:
+            for r in Ohms:
+                Parallel += (1/(r))
+            Parallel = Parallel ** -1
+        return Parallel
     except ZeroDivisionError:
         raise ZeroDivisionError("You Divided by 0 buddy")
     
-    return Resistance_Total
     
-
-
 def get_input(prompt):
     while True:
         user_val = input(prompt)
@@ -63,7 +70,7 @@ def get_input(prompt):
 
 
 if __name__ == "__main__":
-    Decision = input("Which Function would you like to use? 1. DC_calculator ")
+    Decision = input("Which Function would you like to use? 1. DC_calculator 2. Resistance Calculator ")
 
     if Decision == "1":
         V = get_input("Voltage (V): ")
@@ -75,18 +82,24 @@ if __name__ == "__main__":
         print(f"The DC values are Voltage: {result[0]:.3f} Volts, Current: {result[1]:.3f} , Resistance: {result[2]:.3f} Ohms and Power: {result[3]:.3f} Watts")
 
     elif Decision == "2":
-        Resistances_Series = []
-        Resistances_Parallel = []
-        Series = input("How many resistors do you have in series? ")
-        Parallel = input("How many resistors do you have in parallel? ")
-        for i in range(0, len(int(Series))):
-            Ohms = input("What is the resistance for each one in Series?")
-            Resistances_Series.append(Ohms)
-            print(Resistances_Series)
-        for i in range(0, len(int(Parallel))):
-            Ohms = input("What is the resistance for each one in Parallel?")
-            resistance_calculator(1, 0, Ohms)
+        Resistors_Series = []
+        Resistors_Parallel = []
 
-            print(Resistances_Series)
+        Series = int(input("How many resistors do you have in series? "))
+        Parallel = int(input("How many resistors do you have in parallel? "))
 
+        for i in range(0, Series):
+            Ohms = float(input("What is the resistance for each one in Series? "))
+            Resistors_Series.append(Ohms)
+
+        for i in range(0, Parallel):
+            Ohms = float(input("What is the resistance for each one in Parallel? "))
+            Resistors_Parallel.append(Ohms)
+ 
+
+        if (len(Resistors_Series) and len(Resistors_Parallel) != 0):
+            Total_REQ = resistance_parallel(Resistors_Parallel) + resistance_series(Resistors_Series)
+            print(f"The Total Resistance in your circuit is {Total_REQ:.3f} Ohms")
+        else:
+            print("Hey you did not put any resistors")
 

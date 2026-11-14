@@ -24,3 +24,6 @@ def test_voltage_and_power():
     V, I, R, P = Solve_DC(12, None, None, 36)
     assert I == pytest.approx(3)
     assert R == pytest.approx(4)
+
+def test_series_and_parallel():
+    pass
