@@ -62,31 +62,31 @@ def get_input(prompt):
 
 
 
-Decision = input("Which Function would you like to use? 1. DC_calculator ")
+if __name__ == "__main__":
+    Decision = input("Which Function would you like to use? 1. DC_calculator ")
 
+    if Decision == "1":
+        V = get_input("Voltage (V): ")
+        I = get_input("Current (I): ")
+        R = get_input("Resistance (R): ")
+        P = get_input("Power (P): ")
 
-if Decision == "1":
-    V = get_input("Voltage (V): ")
-    I = get_input("Current (I): ")
-    R = get_input("Resistance (R): ")
-    P = get_input("Power (P): ")
+        result = Solve_DC(V, I, R, P)
+        print(f"The DC values are Voltage: {result[0]:.3f} Volts, Current: {result[1]:.3f} , Resistance: {result[2]:.3f} Ohms and Power: {result[3]:.3f} Watts")
 
-    result = Solve_DC(V, I, R, P)
-    print(f"The DC values are Voltage: {result[0]:.3f} Volts, Current: {result[1]:.3f} , Resistance: {result[2]:.3f} Ohms and Power: {result[3]:.3f} Watts")
+    elif Decision == "2":
+        Resistances_Series = []
+        Resistances_Parallel = []
+        Series = input("How many resistors do you have in series? ")
+        Parallel = input("How many resistors do you have in parallel? ")
+        for i in range(0, len(int(Series))):
+            Ohms = input("What is the resistance for each one in Series?")
+            Resistances_Series.append(Ohms)
+            print(Resistances_Series)
+        for i in range(0, len(int(Parallel))):
+            Ohms = input("What is the resistance for each one in Parallel?")
+            resistance_calculator(1, 0, Ohms)
 
-elif Decision == "2":
-    Resistances_Series = []
-    Resistances_Parallel = []
-    Series = input("How many resistors do you have in series? ")
-    Parallel = input("How many resistors do you have in parallel? ")
-    for i in range(0, len(int(Series))):
-        Ohms = input("What is the resistance for each one in Series?")
-        Resistances_Series.append(Ohms)
-        print(Resistances_Series)
-    for i in range(0, len(int(Parallel))):
-        Ohms = input("What is the resistance for each one in Parallel?")
-        resistance_calculator(1, 0, Ohms)
-
-        print(Resistances_Series)
+            print(Resistances_Series)
 
 
