@@ -2,6 +2,7 @@ import pytest
 from Circuit_Calculator import Solve_DC
 from Circuit_Calculator import resistance_series
 from Circuit_Calculator import resistance_parallel
+from Circuit_Calculator import log_result, read_logs, clear_logs
 
 
 def test_voltage_and_resistance():
@@ -43,3 +44,25 @@ def test_series_empty():
 def test_parallel_empty():
     with pytest.raises(ValueError):
         resistance_parallel([])
+
+def test_log_result_writes_entry(tmp_path):
+    f = tmp_path / "history.txt"
+    log_result("DC", "test entry", str(f))
+    assert "test entry" in f.read_text()
+
+def test_log_result_appends(tmp_path):
+    f = tmp_path / "history.txt"
+    log_result("DC", "first", str(f))
+    log_result("DC", "second", str(f))
+    lines = f.read_text().splitlines()
+    assert len(lines) == 2
+
+def test_read_logs_missing_file(tmp_path, capsys):
+    read_logs(str(tmp_path / "nope.txt"))
+    assert "No History" in capsys.readouterr().out
+
+def test_clear_logs(tmp_path):
+    f = tmp_path / "history.txt"
+    log_result("DC", "entry", str(f))
+    clear_logs(str(f))
+    assert f.read_text() == ""

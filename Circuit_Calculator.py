@@ -1,5 +1,7 @@
 # Ohm's Law
 import math
+from datetime import datetime, timezone
+import os
 def Solve_DC(V = None, I = None, R = None, P = None):
     known = {"V": V, "I": I, "R": R, "P": P}
     if ([V, I, R, P].count(None) > 2):
@@ -65,14 +67,39 @@ def get_input(prompt):
         except ValueError:
             print("Not whole number so try again")
             
+def log_result(label, text, filename="Results.txt"):
+    with open(filename, "a", encoding="utf-8") as file:
+        calculated_at = datetime.now().strftime("%Y-%m-%d %H:%M")
+        file.write(f"At time {calculated_at} the {label} was: {text} \n")
+
+def read_logs(filename="Results.txt"):
+    try:
+        with open(filename, "r", encoding="utf-8") as file:
+            History = file.read()
+    except FileNotFoundError:
+        print("No History to look back on")
+        return
+    if History == "":
+        print("There is no history")
+        return
+    print(History)
+
+def clear_logs(filename="Results.txt"):
+    if not os.path.exists(filename):
+        print("No history to remove")
+        return
+    with open(filename, "w", encoding="utf-8"):
+        pass
+
 
 
 
 
 
 if __name__ == "__main__":
-    Decision = input("Which Function would you like to use? 1. DC_calculator 2. Resistance Calculator ")
+    Decision = input("Which Function would you like to use? 1. DC_calculator 2. Resistance Calculator 3. History ")
 
+    # DC Calculator
     if Decision == "1":
         V = get_input("Voltage (V): ")
         I = get_input("Current (I): ")
@@ -80,8 +107,12 @@ if __name__ == "__main__":
         P = get_input("Power (P): ")
 
         result = Solve_DC(V, I, R, P)
-        print(f"The DC values are Voltage: {result[0]:.3f} Volts, Current: {result[1]:.3f} , Resistance: {result[2]:.3f} Ohms and Power: {result[3]:.3f} Watts")
+        Text = f"{result[0]:.3f} Volts, Current: {result[1]:.3f} , Resistance: {result[2]:.3f} Ohms and Power: {result[3]:.3f} Watts"
+        print(f"The DC values are Voltage: {Text}")
 
+        log_result("DC calculation", Text)
+
+    # Resistance Calculator
     elif Decision == "2":
         Resistors_Series = []
         Resistors_Parallel = []
@@ -97,15 +128,25 @@ if __name__ == "__main__":
             Ohms = float(input("What is the resistance for each one in Parallel? "))
             Resistors_Parallel.append(Ohms)
 
-        if (len(Resistors_Series) and len(Resistors_Parallel) == 0):
+        if (len(Resistors_Series) == 0 and len(Resistors_Parallel) == 0):
             print("Hey you did not put any resistors")
         else:
             try:
                 Total_REQ = resistance_series(Resistors_Series)
-                if resistance_parallel(Resistors_Parallel):
-                    Total_REQ += resistance_parallel(resistance_parallel)
-                print(f"The Total Resistance in your circuit is {Total_REQ:.3f} Ohms")
-            except ValueError as e:
-                print(e)
+                if Resistors_Parallel:
+                    Total_REQ += resistance_parallel(Resistors_Parallel)
+                Resistance_text = (f"{Total_REQ:.3f} Ohms")
+                print(f"The Total Resistance in your circuit is {Resistance_text} ")
 
+                log_result("Resistance Calculation", Resistance_text)
+
+            except (ValueError, ZeroDivisionError) as e:
+                print(e)
+    elif Decision == "3":
+        History = input("Would you like to see your history? (Y/N) ").upper()
+        if History == "Y":
+            read_logs()
+        Eraser = input("Do you wanna Delete all your data? (WARNING: Permanant) (Y/N) ").upper()
+        if Eraser == "Y":
+            clear_logs()
 
