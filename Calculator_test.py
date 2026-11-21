@@ -3,6 +3,7 @@ from Circuit_Calculator import Solve_DC
 from Circuit_Calculator import resistance_series
 from Circuit_Calculator import resistance_parallel
 from Circuit_Calculator import log_result, read_logs, clear_logs
+from CircuitClasses import Resistor
 
 
 def test_voltage_and_resistance():
@@ -66,3 +67,28 @@ def test_clear_logs(tmp_path):
     log_result("DC", "entry", str(f))
     clear_logs(str(f))
     assert f.read_text() == ""
+
+def test_valid_resistor():
+    assert Resistor(100).resistance == 100
+
+def test_zero_resistance_rejected():
+    with pytest.raises(ValueError):
+        Resistor(0)
+
+def test_negative_resistance_rejected():
+    with pytest.raises(ValueError):
+        Resistor(-5)
+
+def test_changing_resistance_is_validated():
+    r = Resistor(100)
+    with pytest.raises(ValueError):
+        r.resistance = -1
+
+def test_current():
+    assert Resistor(100).current(12) == pytest.approx(0.12)
+
+def test_power():
+    assert Resistor(100).power_output(10) == pytest.approx(1.0)
+
+def test_str():
+    assert "100" in str(Resistor(100))

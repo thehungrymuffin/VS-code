@@ -1,7 +1,7 @@
 #Hangman game
 # list of possible words
 import random
-words = ["shark", "gamer", "gumpo", "obtuse"]
+words = ["shark", "gamer", "hungry", "obtuse"]
 
 def round():
     current_word = list()
@@ -12,6 +12,7 @@ def round():
 
     #Testing
     print(chosen_word)
+
 
     print("The word chosen is: ")
     for i in range(0, len(chosen_word)):
@@ -42,13 +43,7 @@ def round():
     if game_condition == True:
         print("Wow you did it the word was" + str(chosen_word))
     else:
-        print("You failed all your lives!")
-
-            
-
-    
-
-        
+        print("You failed all your lives are gone!")
 
 
 intro = input("Hello would you like to play Hangman? (Y/N)  ").upper()
